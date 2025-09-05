@@ -9,7 +9,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
+        "php": "^8.4",
         "inertiajs/inertia-laravel": "^2.0",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
@@ -17,6 +17,7 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
+        "itsgoingd/clockwork": "*",
         "larastan/larastan": "^3.6",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.18",
@@ -24,7 +25,8 @@
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
         "pestphp/pest": "^4.0",
-        "pestphp/pest-plugin-laravel": "^4.0"
+        "pestphp/pest-plugin-laravel": "^4.0",
+        "rector/rector": "^2.1"
     },
     "autoload": {
         "psr-4": {
@@ -69,6 +71,16 @@
         "test": [
             "@php artisan config:clear --ansi",
             "@php artisan test"
+        ],
+        "phpstan": [
+            "phpstan analyse --memory-limit=1G"
+        ],
+        "lint": [
+            "pint --test",
+            "composer validate --no-check-all --strict"
+        ],
+        "rector": [
+            "rector --memory-limit=1G"
         ]
     },
     "extra": {
