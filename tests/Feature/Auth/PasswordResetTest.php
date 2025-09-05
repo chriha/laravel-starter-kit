@@ -27,7 +27,7 @@ test('reset password screen can be rendered', function (): void {
 
     $this->post(route('password.email'), ['email' => $user->email]);
 
-    Notification::assertSentTo($user, ResetPassword::class, function ($notification) {
+    Notification::assertSentTo($user, ResetPassword::class, function ($notification): bool {
         $response = $this->get(route('password.reset', $notification->token));
 
         $response->assertStatus(200);
@@ -43,7 +43,7 @@ test('password can be reset with valid token', function (): void {
 
     $this->post(route('password.email'), ['email' => $user->email]);
 
-    Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
+    Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user): bool {
         $response = $this->post(route('password.store'), [
             'token' => $notification->token,
             'email' => $user->email,

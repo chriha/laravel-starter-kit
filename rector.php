@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -18,6 +19,14 @@ return RectorConfig::configure()
     // in case we run into a timeout or memory issue, we can either increase
     // the memory_limit (--memory-limit=1G) or prevent running in parallel
     // ->withoutParallel()
-    // uncomment to reach your current PHP version
     ->withPhpSets(php84: true)
-    ->withTypeCoverageLevel(30); // target: 100
+    ->withSkip([
+        NullToStrictStringFuncCallArgRector::class,
+    ])
+    ->withPreparedSets(
+        deadCode: true,
+        codeQuality: true,
+        codingStyle: true,
+        typeDeclarations: true,
+        earlyReturn: true,
+    );
