@@ -10,11 +10,16 @@ This Vue starter kit utilizes Vue 3 and the Composition API, TypeScript, Tailwin
 
 ### Goodies
 
-Additionally to the base Laravel Starter Kit, this kit also adds the following packages and its configurations:
+Additionally to the base Laravel Starter Kit, this kit also adds the following packages and configurations:
 
 - [larastan/larastan](https://github.com/larastan/larastan)
 - [rectorphp/rector](https://github.com/rectorphp/rector)
 - [itsgoingd/clockwork](https://github.com/itsgoingd/clockwork)
+
+### Changes
+
+- Model::shouldBeStrict()
+- `app/helpers.php` for helper functions
 
 ## Official Documentation
 
