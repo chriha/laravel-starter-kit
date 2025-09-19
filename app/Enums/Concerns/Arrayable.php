@@ -18,7 +18,7 @@ trait Arrayable
     public static function toArray(): array
     {
         return collect(static::cases())
-            ->map(fn (BackedEnum $case) => $case->value)
+            ->map(fn (BackedEnum $case): int|string => $case->value)
             ->toArray();
     }
 

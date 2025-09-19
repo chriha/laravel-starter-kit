@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
+use Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -22,6 +23,10 @@ return RectorConfig::configure()
     ->withPhpSets(php84: true)
     ->withSkip([
         NullToStrictStringFuncCallArgRector::class,
+    ])
+    // ->withConfiguredRule(DeclareStrictTypesRector::class)
+    ->withRules([
+        DeclareStrictTypesRector::class,
     ])
     ->withPreparedSets(
         deadCode: true,
