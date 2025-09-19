@@ -15,6 +15,13 @@ Additionally to the base Laravel Starter Kit, this kit also adds the following p
 - [larastan/larastan](https://github.com/larastan/larastan)
 - [rectorphp/rector](https://github.com/rectorphp/rector)
 - [itsgoingd/clockwork](https://github.com/itsgoingd/clockwork)
+- Strict Models
+- Automatically eager load relationships
+- Helper functions
+- Immutable dates
+- Force HTTPS in non-local environments
+- Prohibit destructive commands in production
+- Asset prefetching
 
 ### Changes
 
