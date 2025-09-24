@@ -29,7 +29,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
+
+      - name: Install Dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Install Node Dependencies
         run: npm ci
@@ -39,9 +41,6 @@ jobs:
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
-
-      - name: Install Dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Copy Environment File
         run: cp .env.example .env

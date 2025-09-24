@@ -24,8 +24,8 @@
         "laravel/sail": "^1.41",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
-        "pestphp/pest": "^4.0",
-        "pestphp/pest-plugin-browser": "^4.0",
+        "pestphp/pest": "^4.1",
+        "pestphp/pest-plugin-browser": "^4.1",
         "pestphp/pest-plugin-laravel": "^4.0",
         "pestphp/pest-plugin-type-coverage": "^4.0",
         "rector/rector": "^2.1"
@@ -75,7 +75,7 @@
             "rector",
             "npm run lint"
         ],
-        "test:type-coverage": "pest --type-coverage --min=100",
+        "test:type-coverage": "pest --type-coverage --min=100 --memory-limit=1G",
         "test:lint": [
             "composer validate --no-check-all --strict",
             "pint --test",
@@ -90,6 +90,12 @@
             "@test:lint",
             "@test:types",
             "@test:unit"
+        ],
+        "mail:up":  [
+            "docker compose --profile mail up -d"
+        ],
+        "mail:down":  [
+            "docker compose --profile mail down"
         ]
     },
     "extra": {
