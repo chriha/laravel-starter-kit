@@ -15,8 +15,7 @@ it('shows the profile settings page', function (): void {
         ->assertInertia(fn (Assert $page): Assert => $page
             ->component('settings/Profile')
             ->where('mustVerifyEmail', false)
-            ->has('status')
-        );
+            ->has('status'));
 });
 
 it('updates the profile without changing the email', function (): void {
@@ -62,7 +61,8 @@ it('updates the profile and resets verification when email changes', function ()
 });
 
 it('deletes the user account with the correct password', function (): void {
-    $user = User::factory()->create(); // factory sets password to "password"
+    // factory sets password to "password"
+    $user = User::factory()->create();
 
     $response = $this->actingAs($user)->delete(route('profile.destroy'), [
         'password' => 'password',

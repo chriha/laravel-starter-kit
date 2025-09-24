@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
+ * @phpcs:disable PSR1.Files.SideEffects.FoundWithSymbols
+ */
+
 declare(strict_types=1);
 
 use App\Enums\Concerns\Conditionable;

@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<ruleset
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    name="EQData"
+    xsi:noNamespaceSchemaLocation="phpcs.xsd">
+
+    <config name="installed_paths" value="vendor/slevomat/coding-standard"/>
+
+    <file>app</file>
+    <file>bootstrap</file>
+    <file>config</file>
+    <file>database</file>
+    <file>resources</file>
+    <file>routes</file>
+    <file>tests</file>
+
+    <exclude-pattern>bootstrap/cache/*</exclude-pattern>
+    <exclude-pattern>bootstrap/autoload.php</exclude-pattern>
+    <exclude-pattern>*/seeds/*</exclude-pattern>
+    <exclude-pattern>*.blade.php</exclude-pattern>
+    <exclude-pattern>*.js</exclude-pattern>
+
+    <arg name="basepath" value="."/>
+    <arg name="extensions" value="php"/>
+    <arg name="report-json" value="phpcs.json"/>
+    <arg name="report-full" value="phpcs.txt"/>
+    <arg name="report-summary" />
+    <arg name="report-junit" value="phpcs-junit.xml"/>
+
+    <rule ref="PSR2" >
+        <exclude name="Generic.Files.LineLength"/>
+        <exclude name="PSR2.Classes.ClassDeclaration.OpenBraceNewLine"/>
+        <exclude name="Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore" />
+        <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine" />
+    </rule>
+
+    <rule ref="PSR1.Methods.CamelCapsMethodName">
+        <file>tests</file>
+        <exclude-pattern>./tests/*</exclude-pattern>
+    </rule>
+
+    <rule ref="Generic.WhiteSpace.ScopeIndent.IncorrectExact">
+        <exclude-pattern>app/Sdks/EquiScore/Requests/GetAuthTokenRequest.php</exclude-pattern>
+        <exclude-pattern>app/Sdks/GenderApi/Requests/PersonInfoByFullNameRequest.php</exclude-pattern>
+        <exclude-pattern>app/Sdks/Wst/Requests/GetAuthTokenRequest.php</exclude-pattern>
+        <exclude-pattern>app/Sdks/WinJump/Requests/GetAuthTokenRequest.php</exclude-pattern>
+        <exclude-pattern>app/Imports/Wst/CompetitionImporter.php</exclude-pattern>
+        <exclude-pattern>app/Imports/Concerns/HandlesCompetitors.php</exclude-pattern>
+        <exclude-pattern>app/Imports/Equipe/CompetitionImporter.php</exclude-pattern>
+        <exclude-pattern>app/Imports/LonginesTiming/CompetitionImporter.php</exclude-pattern>
+        <exclude-pattern>app/Imports/EquiScore/CompetitionImporter.php</exclude-pattern>
+        <exclude-pattern>app/Imports/ChioAachen/CompetitionImporter.php</exclude-pattern>
+        <exclude-pattern>app/Imports/Fei/CompetitionImporter.php</exclude-pattern>
+        <exclude-pattern>app/Imports/Scg/CompetitionImporter.php</exclude-pattern>
+        <exclude-pattern>app/Imports/WinJump/CompetitionImporter.php</exclude-pattern>
+        <exclude-pattern>tests/Unit/Sdks/Concerns/CustomCacheKeyTest.php </exclude-pattern>
+    </rule>
+    <rule ref="Squiz.WhiteSpace.ScopeClosingBrace.Indent">
+<!--        <exclude-pattern>app/...</exclude-pattern>-->
+    </rule>
+
+
+    <!-- https://github.com/slevomat/coding-standard/tree/master?tab=readme-ov-file#alphabetical-list-of-sniffs -->
+    <!-- sniffs to include -->
+    <rule ref="SlevomatCodingStandard.Arrays.ArrayAccess"/>
+    <rule ref="SlevomatCodingStandard.Arrays.DisallowImplicitArrayCreation"/>
+    <!-- <rule ref="SlevomatCodingStandard.Arrays.DisallowPartiallyKeyed"/> -->
+    <rule ref="SlevomatCodingStandard.Arrays.MultiLineArrayEndBracketPlacement"/>
+    <rule ref="SlevomatCodingStandard.Arrays.SingleLineArrayWhitespace">
+        <!-- <properties> -->
+        <!--     <property name="spacesAroundBrackets" value="1"/> -->
+        <!-- </properties> -->
+    </rule>
+    <rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma"/>
+    <rule ref="SlevomatCodingStandard.Attributes.AttributeAndTargetSpacing"/>
+    <rule ref="SlevomatCodingStandard.Attributes.AttributesOrder">
+        <properties>
+            <property name="orderAlphabetically" value="true" />
+        </properties>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Attributes.RequireAttributeAfterDocComment"/>
+    <rule ref="SlevomatCodingStandard.Classes.BackedEnumTypeSpacing"/>
+    <rule ref="SlevomatCodingStandard.Classes.ClassLength"/>
+    <rule ref="SlevomatCodingStandard.Classes.ClassConstantVisibility"/>
+    <rule ref="SlevomatCodingStandard.Classes.ClassMemberSpacing"/>
+    <rule ref="SlevomatCodingStandard.Classes.ClassStructure"/>
+    <rule ref="SlevomatCodingStandard.Classes.ConstantSpacing"/>
+    <rule ref="SlevomatCodingStandard.Classes.DisallowLateStaticBindingForConstants"/>
+    <rule ref="SlevomatCodingStandard.Classes.DisallowMultiConstantDefinition"/>
+    <rule ref="SlevomatCodingStandard.Classes.DisallowMultiPropertyDefinition"/>
+    <rule ref="SlevomatCodingStandard.Classes.DisallowStringExpressionPropertyFetch"/>
+    <rule ref="SlevomatCodingStandard.Classes.EnumCaseSpacing"/>
+    <rule ref="SlevomatCodingStandard.Classes.ForbiddenPublicProperty">
+        <exclude-pattern>app/DataObjects/</exclude-pattern>
+        <exclude-pattern>app/Jobs/</exclude-pattern>
+        <exclude-pattern>app/Listeners/</exclude-pattern>
+        <exclude-pattern>app/Models/</exclude-pattern>
+        <exclude-pattern>app/Nova/</exclude-pattern>
+        <exclude-pattern>app/Observers/</exclude-pattern>
+        <exclude-pattern>app/Providers/</exclude-pattern>
+        <exclude-pattern>tests/</exclude-pattern>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Classes.MethodSpacing"/>
+    <rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference"/>
+    <rule ref="SlevomatCodingStandard.Classes.ParentCallSpacing"/>
+    <rule ref="SlevomatCodingStandard.Classes.PropertyDeclaration"/>
+    <rule ref="SlevomatCodingStandard.Classes.PropertySpacing"/>
+    <rule ref="SlevomatCodingStandard.Classes.RequireConstructorPropertyPromotion"/>
+    <rule ref="SlevomatCodingStandard.Classes.RequireSelfReference"/>
+    <rule ref="SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming"/>
+    <rule ref="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming"/>
+    <rule ref="SlevomatCodingStandard.Classes.SuperfluousTraitNaming"/>
+    <rule ref="SlevomatCodingStandard.Classes.UselessLateStaticBinding"/>
+    <rule ref="SlevomatCodingStandard.Commenting.AnnotationName"/>
+    <rule ref="SlevomatCodingStandard.Commenting.DeprecatedAnnotationDeclaration"/>
+    <rule ref="SlevomatCodingStandard.Commenting.DisallowCommentAfterCode"/>
+    <rule ref="SlevomatCodingStandard.Commenting.ForbiddenComments"/>
+<!--    <rule ref="SlevomatCodingStandard.Commenting.RequireOneLineDocComment"/>-->
+    <rule ref="SlevomatCodingStandard.Commenting.RequireOneLinePropertyDocComment"/>
+    <rule ref="SlevomatCodingStandard.Commenting.UselessFunctionDocComment"/>
+    <rule ref="SlevomatCodingStandard.Commenting.UselessInheritDocComment"/>
+    <rule ref="SlevomatCodingStandard.Complexity.Cognitive">
+        <properties>
+            <property name="warningThreshold" value="8" />
+            <property name="errorThreshold" value="9" />
+	    </properties>
+    </rule>
+</ruleset>

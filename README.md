@@ -13,6 +13,8 @@ This Vue starter kit utilizes Vue 3 and the Composition API, TypeScript, Tailwin
 Additionally to the base Laravel Starter Kit, this kit also adds the following packages and configurations:
 
 - [larastan/larastan](https://github.com/larastan/larastan)
+- [squizlabs/php_codesniffer](https://github.com/squizlabs/php_codesniffer)
+- [slevomat/coding-standard](https://github.com/slevomat/coding-standard)
 - [rectorphp/rector](https://github.com/rectorphp/rector)
 - [itsgoingd/clockwork](https://github.com/itsgoingd/clockwork)
 - Strict Models
