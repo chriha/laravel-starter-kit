@@ -29,6 +29,7 @@
         "pestphp/pest-plugin-laravel": "^4.0",
         "pestphp/pest-plugin-type-coverage": "^4.0",
         "rector/rector": "^2.1",
+        "roave/security-advisories": "dev-latest",
         "slevomat/coding-standard": "^8.23",
         "squizlabs/php_codesniffer": "^4.0"
     },
@@ -117,6 +118,6 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true
 }

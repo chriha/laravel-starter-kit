@@ -17,6 +17,7 @@ Additionally to the base Laravel Starter Kit, this kit also adds the following p
 - [slevomat/coding-standard](https://github.com/slevomat/coding-standard)
 - [rectorphp/rector](https://github.com/rectorphp/rector)
 - [itsgoingd/clockwork](https://github.com/itsgoingd/clockwork)
+- [Roave Security Advisories](https://github.com/Roave/SecurityAdvisories)
 - Strict Models
 - Automatically eager load relationships
 - Helper functions
