@@ -20,6 +20,7 @@
         "fakerphp/faker": "^1.23",
         "itsgoingd/clockwork": "*",
         "larastan/larastan": "^3.6",
+        "laravel/boost": "^1.8",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.25",
         "laravel/sail": "^1.41",
