@@ -6,9 +6,7 @@ namespace App\Enums\Concerns;
 
 use BackedEnum;
 
-/**
- * @mixin BackedEnum
- */
+/** @mixin BackedEnum */
 trait Conditionable
 {
     public function is(self|string|null $value): bool
@@ -36,7 +34,9 @@ trait Conditionable
                 continue;
             }
 
-            $enum = $value instanceof self ? $value : self::from($value);
+            $enum = $value instanceof self
+                ? $value
+                : self::from($value);
 
             if ($this->is($enum)) {
                 return true;

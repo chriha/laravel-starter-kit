@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <ruleset
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    name="EQData"
+    name="LaravelStarterKit"
     xsi:noNamespaceSchemaLocation="phpcs.xsd">
 
     <config name="installed_paths" value="vendor/slevomat/coding-standard"/>
@@ -39,24 +39,8 @@
         <exclude-pattern>./tests/*</exclude-pattern>
     </rule>
 
-    <rule ref="Generic.WhiteSpace.ScopeIndent.IncorrectExact">
-        <exclude-pattern>app/Sdks/EquiScore/Requests/GetAuthTokenRequest.php</exclude-pattern>
-        <exclude-pattern>app/Sdks/GenderApi/Requests/PersonInfoByFullNameRequest.php</exclude-pattern>
-        <exclude-pattern>app/Sdks/Wst/Requests/GetAuthTokenRequest.php</exclude-pattern>
-        <exclude-pattern>app/Sdks/WinJump/Requests/GetAuthTokenRequest.php</exclude-pattern>
-        <exclude-pattern>app/Imports/Wst/CompetitionImporter.php</exclude-pattern>
-        <exclude-pattern>app/Imports/Concerns/HandlesCompetitors.php</exclude-pattern>
-        <exclude-pattern>app/Imports/Equipe/CompetitionImporter.php</exclude-pattern>
-        <exclude-pattern>app/Imports/LonginesTiming/CompetitionImporter.php</exclude-pattern>
-        <exclude-pattern>app/Imports/EquiScore/CompetitionImporter.php</exclude-pattern>
-        <exclude-pattern>app/Imports/ChioAachen/CompetitionImporter.php</exclude-pattern>
-        <exclude-pattern>app/Imports/Fei/CompetitionImporter.php</exclude-pattern>
-        <exclude-pattern>app/Imports/Scg/CompetitionImporter.php</exclude-pattern>
-        <exclude-pattern>app/Imports/WinJump/CompetitionImporter.php</exclude-pattern>
-        <exclude-pattern>tests/Unit/Sdks/Concerns/CustomCacheKeyTest.php </exclude-pattern>
-    </rule>
     <rule ref="Squiz.WhiteSpace.ScopeClosingBrace.Indent">
-<!--        <exclude-pattern>app/...</exclude-pattern>-->
+        <!--        <exclude-pattern>app/...</exclude-pattern>-->
     </rule>
 
 
@@ -115,7 +99,7 @@
     <rule ref="SlevomatCodingStandard.Commenting.DeprecatedAnnotationDeclaration"/>
     <rule ref="SlevomatCodingStandard.Commenting.DisallowCommentAfterCode"/>
     <rule ref="SlevomatCodingStandard.Commenting.ForbiddenComments"/>
-<!--    <rule ref="SlevomatCodingStandard.Commenting.RequireOneLineDocComment"/>-->
+    <rule ref="SlevomatCodingStandard.Commenting.RequireOneLineDocComment"/>
     <rule ref="SlevomatCodingStandard.Commenting.RequireOneLinePropertyDocComment"/>
     <rule ref="SlevomatCodingStandard.Commenting.UselessFunctionDocComment"/>
     <rule ref="SlevomatCodingStandard.Commenting.UselessInheritDocComment"/>
@@ -123,6 +107,36 @@
         <properties>
             <property name="warningThreshold" value="8" />
             <property name="errorThreshold" value="9" />
-	    </properties>
+        </properties>
     </rule>
+    <rule ref="SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing">
+        <properties>
+            <property name="linesCountBefore" value="1" />
+            <property name="linesCountAfter" value="1" />
+        </properties>
+    </rule>
+    <rule ref="SlevomatCodingStandard.ControlStructures.DisallowEmpty"/>
+    <rule ref="SlevomatCodingStandard.ControlStructures.DisallowTrailingMultiLineTernaryOperator"/>
+    <rule ref="SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing">
+        <properties>
+            <property name="linesCountBefore" value="1" />
+            <property name="linesCountAfter" value="0" />
+            <property name="jumpStatements" type="array">
+                <element value="goto"/>
+                <element value="break"/>
+                <element value="continue"/>
+                <element value="return"/>
+                <element value="throw"/>
+            </property>
+        </properties>
+    </rule>
+    <rule ref="SlevomatCodingStandard.ControlStructures.LanguageConstructWithParentheses"/>
+    <!--    <rule ref="SlevomatCodingStandard.ControlStructures.NewWithoutParentheses"/>-->
+    <rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineCondition"/>
+    <rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineTernaryOperator"/>
+    <rule ref="SlevomatCodingStandard.ControlStructures.RequireTernaryOperator"/>
+    <rule ref="SlevomatCodingStandard.ControlStructures.DisallowYodaComparison"/>
+    <rule ref="SlevomatCodingStandard.ControlStructures.UselessIfConditionWithReturn"/>
+    <rule ref="SlevomatCodingStandard.ControlStructures.UselessTernaryOperator"/>
+    <rule ref="SlevomatCodingStandard.Exceptions.DeadCatch"/>
 </ruleset>

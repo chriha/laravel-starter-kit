@@ -7,18 +7,14 @@ namespace App\Enums\Concerns;
 use BackedEnum;
 use Illuminate\Support\Collection;
 
-/**
- * @mixin BackedEnum
- */
+/** @mixin BackedEnum */
 trait Arrayable
 {
-    /**
-     * @return array<int, string>
-     */
+    /** @return array<int, string> */
     public static function toArray(): array
     {
         return collect(static::cases())
-            ->map(fn (BackedEnum $case): int|string => $case->value)
+            ->map(static fn (BackedEnum $case): int|string => $case->value)
             ->toArray();
     }
 

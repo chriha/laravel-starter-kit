@@ -12,7 +12,7 @@ it('shows the profile settings page', function (): void {
 
     $response
         ->assertOk()
-        ->assertInertia(fn (Assert $page): Assert => $page
+        ->assertInertia(static fn (Assert $page): Assert => $page
             ->component('settings/Profile')
             ->where('mustVerifyEmail', false)
             ->has('status'));
