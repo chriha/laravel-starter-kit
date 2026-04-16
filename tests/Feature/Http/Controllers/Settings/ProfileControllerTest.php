@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use App\Models\User;
+use Database\Factories\UserFactory;
 use Inertia\Testing\AssertableInertia as Assert;
 
 it('shows the profile settings page', function (): void {
-    $user = User::factory()->create();
+    $user = UserFactory::new()->create();
 
     $response = $this->actingAs($user)->get(route('profile.edit'));
 
@@ -19,7 +19,7 @@ it('shows the profile settings page', function (): void {
 });
 
 it('updates the profile without changing the email', function (): void {
-    $user = User::factory()->create([
+    $user = UserFactory::new()->create([
         'name' => 'Old Name',
     ]);
 
@@ -40,7 +40,7 @@ it('updates the profile without changing the email', function (): void {
 });
 
 it('updates the profile and resets verification when email changes', function (): void {
-    $user = User::factory()->create([
+    $user = UserFactory::new()->create([
         'name' => 'Old Name',
     ]);
 
@@ -62,7 +62,7 @@ it('updates the profile and resets verification when email changes', function ()
 
 it('deletes the user account with the correct password', function (): void {
     // factory sets password to "password"
-    $user = User::factory()->create();
+    $user = UserFactory::new()->create();
 
     $response = $this->actingAs($user)->delete(route('profile.destroy'), [
         'password' => 'password',

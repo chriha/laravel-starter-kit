@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use App\Models\User;
+use Database\Factories\UserFactory;
 use Illuminate\Support\Facades\Hash;
 
 test('password update page is displayed', function (): void {
-    $user = User::factory()->create();
+    $user = UserFactory::new()->create();
 
     $response = $this
         ->actingAs($user)
@@ -16,7 +16,7 @@ test('password update page is displayed', function (): void {
 });
 
 test('password can be updated', function (): void {
-    $user = User::factory()->create();
+    $user = UserFactory::new()->create();
 
     $response = $this
         ->actingAs($user)
@@ -35,7 +35,7 @@ test('password can be updated', function (): void {
 });
 
 test('correct password must be provided to update password', function (): void {
-    $user = User::factory()->create();
+    $user = UserFactory::new()->create();
 
     $response = $this
         ->actingAs($user)
