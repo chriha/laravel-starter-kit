@@ -88,12 +88,14 @@
             "rector --dry-run --memory-limit=1G",
             "npm run test:lint"
         ],
+        "test:rector": "rector --dry-run",
         "test:unit": "pest --parallel --coverage --exactly=100.0",
         "test:types": "phpstan analyse --memory-limit=1G",
         "test": [
             "@php artisan config:clear --ansi",
             "@test:type-coverage",
             "@test:lint",
+            "@test:rector",
             "@test:types",
             "@test:unit"
         ],
