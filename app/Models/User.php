@@ -27,6 +27,7 @@ final class User extends Authenticatable implements MustVerifyEmail
      *
      * @var list<string>
      */
+    #[Override]
     protected $fillable = [
         'name',
         'email',
@@ -38,6 +39,7 @@ final class User extends Authenticatable implements MustVerifyEmail
      *
      * @var list<string>
      */
+    #[Override]
     protected $hidden = [
         'password',
         'remember_token',
