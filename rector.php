@@ -27,7 +27,7 @@ return RectorConfig::configure()
     // ->withSetProviders(
     //    LaravelSetProvider::class,
     // )
-    ->withPhpSets(php84: true)
+    ->withPhpSets(php85: true)
     ->withSkip([
         ClosureToArrowFunctionRector::class,
         EncapsedStringsToSprintfRector::class,
