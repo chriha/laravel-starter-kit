@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "275e01bc6e0af620a713b6b48b4a4cb8",
+    "content-hash": "0d2a7abc670b40c8da359df7b836f575",
     "packages": [
         {
             "name": "brick/math",
@@ -10771,12 +10771,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "352768f605bdaa1cd675bb919863f9e1185315b6"
+                "reference": "45a16e2029a618c0c6e751b0a06423cf39cbeddc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/352768f605bdaa1cd675bb919863f9e1185315b6",
-                "reference": "352768f605bdaa1cd675bb919863f9e1185315b6",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/45a16e2029a618c0c6e751b0a06423cf39cbeddc",
+                "reference": "45a16e2029a618c0c6e751b0a06423cf39cbeddc",
                 "shasum": ""
             },
             "conflict": {
@@ -11498,8 +11498,8 @@
                 "sheng/yiicms": "<1.2.1",
                 "shopper/cart": "<2.8",
                 "shopper/framework": "<2.8",
-                "shopware/core": "<6.6.10.15-dev|>=6.7,<6.7.8.1-dev",
-                "shopware/platform": "<6.6.10.15-dev|>=6.7,<6.7.8.1-dev",
+                "shopware/core": "<6.6.10.18-dev|>=6.7,<6.7.10.1-dev",
+                "shopware/platform": "<6.6.10.18-dev|>=6.7,<6.7.10.1-dev",
                 "shopware/production": "<=6.3.5.2",
                 "shopware/shopware": "<=5.7.17|>=6.4.6,<6.6.10.10-dev|>=6.7,<6.7.6.1-dev",
                 "shopware/storefront": "<6.6.10.10-dev|>=6.7,<6.7.5.1-dev",
@@ -11854,7 +11854,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-06-04T07:43:00+00:00"
+            "time": "2026-06-04T19:43:59+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -13278,7 +13278,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.4"
+        "php": "^8.5"
     },
     "platform-dev": {},
     "plugin-api-version": "2.9.0"
