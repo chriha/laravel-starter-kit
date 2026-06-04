@@ -2,7 +2,7 @@
 <ruleset
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     name="LaravelStarterKit"
-    xsi:noNamespaceSchemaLocation="phpcs.xsd">
+    xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
 
     <config name="installed_paths" value="vendor/slevomat/coding-standard"/>
 
@@ -56,13 +56,17 @@
         <!-- </properties> -->
     </rule>
     <rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma"/>
-    <rule ref="SlevomatCodingStandard.Attributes.AttributeAndTargetSpacing"/>
+    <rule ref="SlevomatCodingStandard.Attributes.AttributeAndTargetSpacing">
+        <properties>
+            <property name="allowOnSameLine" value="true"/>
+        </properties>
+    </rule>
     <rule ref="SlevomatCodingStandard.Attributes.AttributesOrder">
         <properties>
             <property name="orderAlphabetically" value="true" />
         </properties>
     </rule>
-    <rule ref="SlevomatCodingStandard.Attributes.RequireAttributeAfterDocComment"/>
+<!--    <rule ref="SlevomatCodingStandard.Attributes.RequireAttributeAfterDocComment"/>-->
     <rule ref="SlevomatCodingStandard.Classes.BackedEnumTypeSpacing"/>
     <rule ref="SlevomatCodingStandard.Classes.ClassLength"/>
     <rule ref="SlevomatCodingStandard.Classes.ClassConstantVisibility"/>

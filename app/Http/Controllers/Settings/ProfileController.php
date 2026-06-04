@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Settings;
 
 use App\Http\Requests\Settings\ProfileUpdateRequest;
 use App\Models\User;
+use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,10 +19,10 @@ final class ProfileController
     /**
      * Show the user's profile settings page.
      */
-    public function edit(Request $request): Response
+    public function edit(Request $request, #[CurrentUser] User $user): Response
     {
         return Inertia::render('settings/Profile', [
-            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
+            'mustVerifyEmail' => $user instanceof MustVerifyEmail,
             'status' => $request->session()->get('status'),
         ]);
     }
@@ -29,14 +30,8 @@ final class ProfileController
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(ProfileUpdateRequest $request, #[CurrentUser] User $user): RedirectResponse
     {
-        $user = $request->user();
-
-        if (is_null($user)) {
-            abort(403);
-        }
-
         $user->fill($request->validated());
 
         if ($user->isDirty('email')) {
@@ -51,14 +46,11 @@ final class ProfileController
     /**
      * Delete the user's profile.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request, #[CurrentUser] User $user): RedirectResponse
     {
         $request->validate([
             'password' => ['required', 'current_password'],
         ]);
-
-        /** @var User $user */
-        $user = $request->user();
 
         Auth::logout();
 
