@@ -16,6 +16,7 @@
         "laravel/wayfinder": "^0.1.9"
     },
     "require-dev": {
+        "carthage-software/mago": "^1.42.0",
         "fakerphp/faker": "^1.23",
         "itsgoingd/clockwork": "*",
         "larastan/larastan": "^3.6",
