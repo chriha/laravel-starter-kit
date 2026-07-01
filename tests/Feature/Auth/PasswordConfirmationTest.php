@@ -9,7 +9,7 @@ test('confirm password screen can be rendered', function (): void {
 
     $response = $this->actingAs($user)->get(route('password.confirm'));
 
-    $response->assertStatus(200);
+    $response->assertOk();
 });
 
 test('password can be confirmed', function (): void {

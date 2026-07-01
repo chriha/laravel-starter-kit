@@ -15,11 +15,12 @@ use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use SensitiveParameter;
 
 final readonly class NewPasswordController
 {
     public function __construct(
-        private PasswordBroker $password,
+        #[SensitiveParameter] private PasswordBroker $password,
         private Hasher $hasher,
     ) {}
 

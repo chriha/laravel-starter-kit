@@ -12,7 +12,7 @@ test('password update page is displayed', function (): void {
         ->actingAs($user)
         ->get(route('password.edit'));
 
-    $response->assertStatus(200);
+    $response->assertOk();
 });
 
 test('password can be updated', function (): void {
