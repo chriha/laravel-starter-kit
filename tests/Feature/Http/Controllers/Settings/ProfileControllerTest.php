@@ -14,7 +14,7 @@ it('shows the profile settings page', function (): void {
         ->assertOk()
         ->assertInertia(static fn (Assert $page): Assert => $page
             ->component('settings/Profile')
-            ->where('mustVerifyEmail', false)
+            ->where('mustVerifyEmail', true)
             ->has('status'));
 });
 
