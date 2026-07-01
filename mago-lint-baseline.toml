@@ -1,0 +1,13 @@
+variant = "loose"
+
+[[issues]]
+file = "tests/Unit/Enums/Concerns/ArrayableTest.php"
+code = "file-name"
+message = "Enum `ArrayableSample` should be in a file named `ArrayableSample.php`, found `ArrayableTest.php`."
+count = 1
+
+[[issues]]
+file = "tests/Unit/Enums/Concerns/ConditionableTest.php"
+code = "file-name"
+message = "Enum `ConditionableSample` should be in a file named `ConditionableSample.php`, found `ConditionableTest.php`."
+count = 1

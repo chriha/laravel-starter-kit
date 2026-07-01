@@ -18,12 +18,14 @@ preset = "default"
 
 [linter]
 integrations = ["laravel", "pest"]
+baseline = "mago-lint-baseline.toml"
 
 [linter.rules]
 ambiguous-function-call = { enabled = false }
 literal-named-argument = { enabled = false }
 halstead = { effort-threshold = 7000 }
 no-empty-comment = { enabled = false }
+no-literal-password = { enabled = false }
 
 [analyzer]
 plugins = []
