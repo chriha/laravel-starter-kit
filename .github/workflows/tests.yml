@@ -64,5 +64,8 @@ jobs:
           restore-keys: ${{ runner.os }}-phpstan-
       - run: mkdir -p /tmp/phpstan
 
+      - name: Mago Lint
+        run: vendor/bin/mago lint
+
       - name: Tests
         run: composer test
