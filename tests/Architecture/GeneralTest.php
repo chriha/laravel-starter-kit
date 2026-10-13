@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
+use App\Models\User;
+
 arch()->preset()->php();
 arch()->preset()->security();
-arch()->preset()->strict();
+// casts() must be protected (framework contract).
+arch()->preset()->strict()->ignoring(User::class);
 
 arch()->expect('App')
     ->toUseStrictEquality()
