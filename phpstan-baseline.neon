@@ -11,9 +11,3 @@ parameters:
 			identifier: trait.unused
 			count: 1
 			path: app/Enums/Concerns/Conditionable.php
-
-		-
-			message: '#^Instanceof between App\\Models\\User and Illuminate\\Contracts\\Auth\\MustVerifyEmail will always evaluate to true\.$#'
-			identifier: instanceof.alwaysTrue
-			count: 1
-			path: app/Http/Controllers/Settings/ProfileController.php

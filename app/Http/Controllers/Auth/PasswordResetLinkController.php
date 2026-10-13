@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Requests\Auth\PasswordResetLinkRequest;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,7 +12,7 @@ use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
-final class PasswordResetLinkController
+final readonly class PasswordResetLinkController
 {
     /**
      * Show the password reset link request page.
@@ -28,14 +29,10 @@ final class PasswordResetLinkController
      *
      * @throws ValidationException
      */
-    public function store(Request $request, PasswordBroker $broker): RedirectResponse
+    public function store(PasswordResetLinkRequest $request, PasswordBroker $broker): RedirectResponse
     {
-        $request->validate([
-            'email' => 'required|email',
-        ]);
-
         $broker->sendResetLink(
-            $request->only('email')
+            $request->safe()->only(['email'])
         );
 
         return back()->with('status', __('A reset link will be sent if the account exists.'));

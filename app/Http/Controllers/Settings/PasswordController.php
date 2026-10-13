@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Settings;
 
+use App\Http\Requests\Settings\PasswordUpdateRequest;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 use Inertia\Response;
 
-final class PasswordController
+final readonly class PasswordController
 {
     /**
      * Show the user's password settings page.
@@ -26,12 +25,9 @@ final class PasswordController
     /**
      * Update the user's password.
      */
-    public function update(Request $request, #[CurrentUser] User $user, Hasher $hasher): RedirectResponse
+    public function update(PasswordUpdateRequest $request, #[CurrentUser] User $user, Hasher $hasher): RedirectResponse
     {
-        $validated = $request->validate([
-            'current_password' => ['required', 'current_password'],
-            'password' => ['required', Password::defaults(), 'confirmed'],
-        ]);
+        $validated = $request->validated();
 
         $user->update([
             'password' => $hasher->make($validated['password']),
