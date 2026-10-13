@@ -6,9 +6,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
+use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -26,9 +26,9 @@ final class ConfirmablePasswordController
     /**
      * Confirm the user's password.
      */
-    public function store(Request $request, #[CurrentUser] User $user): RedirectResponse
+    public function store(Request $request, #[CurrentUser] User $user, AuthFactory $auth): RedirectResponse
     {
-        if (! Auth::guard('web')->validate([
+        if (! $auth->guard('web')->validate([
             'email' => $user->email,
             'password' => $request->password,
         ])) {

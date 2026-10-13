@@ -6,11 +6,12 @@ namespace App\Http\Controllers\Settings;
 
 use App\Http\Requests\Settings\ProfileUpdateRequest;
 use App\Models\User;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -46,13 +47,13 @@ final class ProfileController
     /**
      * Delete the user's profile.
      */
-    public function destroy(Request $request, #[CurrentUser] User $user): RedirectResponse
+    public function destroy(Request $request, #[CurrentUser] User $user, #[Auth('web')] StatefulGuard $guard): RedirectResponse
     {
         $request->validate([
             'password' => ['required', 'current_password'],
         ]);
 
-        Auth::logout();
+        $guard->logout();
 
         $user->delete();
 
