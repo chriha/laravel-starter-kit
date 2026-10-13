@@ -1,9 +1,22 @@
 ---
-allowed-tools: Bash(git log:*), Bash(git diff:*)
-description: Code review the locally checked out branch
+allowed-tools: Bash(git log:*), Bash(git diff:*), Bash(git branch:*), Bash(git status:*), Bash(git add:*), Bash(git commit:*), Bash(gh pr view:*), Bash(gh pr diff:*), Bash(gh pr comment:*), Bash(gh pr review:*), Bash(gh api:*), Bash(gh issue list:*), Bash(gh issue create:*), Bash(gh issue comment:*), AskUserQuestion
+argument-hint: [pr#|branch|path] [--comment] [--fix]
+description: Code review the locally checked out branch, a PR, a branch or a path
 ---
 
-Always review the current locally checked out branch. Do not look up any PR or MR.
+Usage: `/local-code-review [pr#|branch|path] [--comment] [--fix]`
+
+**Target** (`$ARGUMENTS` without flags):
+- none: review the current branch (`main...HEAD`).
+- number: a PR (`gh`).
+- branch name: review `main...<branch>`.
+- path: limit the diff to that path.
+
+**Flags:**
+- `--comment`: post verified findings from agents 1, 2 and 5 as PR comments (step 6).
+- `--fix`: apply verified findings to the working tree and commit them (step 6). Never pushes.
+
+Only look up a PR when a number is given or `--comment` is set. Only post comments when `--comment` is set. Only change files when `--fix` is set.
 
 **Agent assumptions (applies to all agents and subagents):**
 - All tools are functional and will work without error. Do not test tools or make exploratory calls. Make sure this is clear to every subagent that is launched.
@@ -11,24 +24,25 @@ Always review the current locally checked out branch. Do not look up any PR or M
 
 To do this, follow these steps precisely:
 
-1. Run `git log main..HEAD --oneline` and `git diff main...HEAD` to understand the changes on the current branch. Use the commit messages as context for the author's intent.
+1. Resolve the target and understand the changes:
+    - none/branch/path: run `git log main..<ref> --oneline` and `git diff main...<ref> [-- <path>]` (`<ref>` = `HEAD` or the branch). Use the commit messages as the author's intent.
+    - number: fetch the diff (`gh pr diff <n>`) and the title/description (`gh pr view <n>`) as the author's intent.
+    - `--comment` with no number: find the PR of the current branch (`gh pr view`). If none exists, stop with a clear message.
+    - `--fix` with a number whose branch is not the checked out one: stop with a clear message.
+    - `--fix`: run `git status --porcelain` now and remember the already dirty paths (before any agent edits files).
 
 2. Launch a haiku agent to return a list of file paths (not their contents) for all relevant CLAUDE.md files including:
     - The root CLAUDE.md file, if it exists
-    - Any CLAUDE.md files in directories containing files modified by the branch
+    - Any CLAUDE.md files in directories containing files modified by the change
 
-3. Launch 5 agents in parallel to independently review the changes. Each agent should return the list of issues, where each issue includes a description and the reason it was flagged (e.g. "CLAUDE.md adherence", "bug"). The agents should do the following:
+3. Launch in parallel: the built-in `/code-review` (agent 3) and agents 1, 2 and 5. Each agent should return the list of issues, where each issue includes a description and the reason it was flagged (e.g. "CLAUDE.md adherence", "test quality"). The agents should do the following:
 
    Agents 1 + 2: CLAUDE.md and rules (`.claude/rules/*`) compliance sonnet agents
    Audit changes for CLAUDE.md compliance in parallel. Note: When evaluating CLAUDE.md compliance for a file, you should only consider CLAUDE.md files that share a file path with the file or parents.
 
-   Agent 3: Opus bug agent (parallel subagent with agents 4 and 5)
-   Scan for obvious bugs. Focus only on the diff itself without reading extra context. Flag only significant bugs; ignore nitpicks and likely false positives. Do not flag issues that you cannot validate without looking at context outside of the git diff.
+   Agent 3: run `/code-review <target>` with the same target, passing `--comment` and `--fix` through when given. Its findings are not validated again in step 4.
 
-   Agent 4: Opus bug agent (parallel subagent with agents 3 and 5)
-   Look for problems that exist in the introduced code. This could be security issues, incorrect logic, etc. Only look for issues that fall within the changed code.
-
-   Agent 5: Sonnet test quality agent (parallel subagent with agents 3 and 4)
+   Agent 5: Sonnet test quality agent
    Review only test files in the diff. For each test, evaluate it against these principles and flag violations:
    - **Goal-first:** tests must specify desired behavior or intent (requirements, edge cases, error handling) — not just exercise code paths.
    - **Small & focused:** each test should check one behavior; flag tests that assert multiple unrelated things or have excessive setup.
@@ -52,17 +66,27 @@ To do this, follow these steps precisely:
 
    If you are not certain an issue is real, do not flag it. False positives erode trust and waste reviewer time.
 
-   Each subagent should be given the git log summary as context for the author's intent.
+   Each subagent should be given the author-intent summary (commit log or PR description) as context.
 
-4. For each issue found in the previous step by agents 3 and 4, launch parallel subagents to validate the issue. These subagents should get the git log summary along with a description of the issue. The agent's job is to review the issue to validate that the stated issue is truly an issue with high confidence. For example, if an issue such as "variable is not defined" was flagged, the subagent's job would be to validate that is actually true in the code. Another example would be CLAUDE.md issues. The agent should validate that the CLAUDE.md rule that was violated is scoped for this file and is actually violated. Use Opus subagents for bugs and logic issues, and sonnet agents for CLAUDE.md violations.
+4. For each issue from agents 1, 2 and 5, launch parallel subagents to validate it. They get the author-intent summary and the issue description, and must confirm with high confidence that the issue is real. For CLAUDE.md issues, confirm the rule is scoped for this file and actually violated. Use sonnet subagents.
 
-5. Filter out any issues that were not validated in step 4. This step will give us our list of high signal issues for our review.
+5. Filter out any issues that were not validated in step 4. Together with the `/code-review` findings this is the list of high signal issues.
 
-6. Output a summary of the review findings to the terminal:
+6. Act on the flags:
+    - `--comment`: post each verified finding from agents 1, 2 and 5 as its own PR comment (`gh pr comment`; inline via `gh pr review` / `gh api` where a line is known). Each comment is 1-3 sentences: the problem, why it matters (quote the rule if one applies), the fix. No preamble, no praise, no summary comment, no repeating the report.
+    - `--fix`: apply the verified findings from agents 1, 2 and 5 to the working tree (bugs are fixed by `/code-review --fix`) and list what changed. Then commit:
+        - No fix applied -> no commit.
+        - Stage by path only the files the fixes changed (never `git add -A`/`.`). Files dirty before the run (step 1) are not staged; list them in the output.
+        - One Conventional Commit following the repo's recent `git log` style. Body: one or two lines, then the `Co-Authored-By` trailer from the session's attribution instructions.
+        - Never push.
+    - `--fix` and a fix was applied: run the harness harvest (`.claude/work-tickets/tickets.md`, "Harness harvest") over the findings applied, with the finding as evidence instead of a PR comment link.
+
+7. Output a summary of the review findings to the terminal:
     - If issues were found, list each issue with a brief description.
+    - With `--fix`, show the commit SHA and subject (or why nothing was committed).
     - If no issues were found, state: "No issues found. Checked for bugs and CLAUDE.md compliance."
 
-7. Add your detailed review as markdown file in `.user/reviews/`.
+8. Write the detailed review to `.user/reviews/<slug>-review.md` (`<slug>` from the target or branch name).
 
 Use this list when evaluating issues (these are false positives, do NOT flag):
 
@@ -73,7 +97,8 @@ Use this list when evaluating issues (these are false positives, do NOT flag):
 - General code quality concerns (e.g., lack of test coverage, general security issues) unless explicitly required in CLAUDE.md
 - Issues mentioned in CLAUDE.md but explicitly silenced in the code (e.g., via a lint ignore comment)
 
+
 Notes:
 
 - Create a todo list before starting.
-- Do not post any GitHub or GitLab comments. Output only to the terminal.
+- Without `--comment`, post nothing to GitHub.

@@ -24,3 +24,23 @@ a `## Plan` section. Tickets reference each other as `#NNN`.
 **Editing an issue body** (tick boxes, append sections): `gh issue view NNN --json body -q .body >
 <repo>/.user/issue-NNN.md`, edit that file, `gh issue edit NNN --body-file <repo>/.user/issue-NNN.md`, then
 `rm` the file. **Changing state**: `gh issue edit NNN --remove-label <old> --add-label <new>`.
+
+## Harness harvest (/work-on-comments, /local-code-review --fix)
+
+Turns review corrections into guardrails. Input: the comments resolved / findings applied in this run.
+
+1. **Classify** each item and print a table: `link (or file:line) -> class -> one-line reason`.
+   - **mechanizable** — could be an arch test, PHPStan rule or CI check.
+   - **instructable** — a missing or unclear line in `.claude/rules/*`, `CLAUDE.md` or a work-tickets brief.
+   - **judgment** — nothing to change; creates nothing.
+2. **Group** mechanizable/instructable items into one pattern each. No patterns -> stop. Give each pattern a stable
+   lowercase key `<guardrail-type>:<area>` (e.g. `mechanizable:controller-layering`); reuse the key of an existing
+   `agent-harness` issue when the pattern matches it.
+3. **Dedupe:** `gh issue list --state all --label agent-harness --search "<key>"`; only if that finds nothing, retry
+   with `<pattern keywords>`. A duplicate gets a `gh issue comment` with the new evidence (PR + comment link), not a new issue.
+4. **Confirm once:** one `AskUserQuestion` listing every new issue and every duplicate comment to post. File
+   nothing without approval; drop what the human rejects.
+5. **File** each approved new pattern: `gh issue create --label agent-harness` (no `ready` label, so
+   `/work-tickets` ignores it until a human triages it). Body: `Key: <key>`,
+   `## Problem` (the comment(s) as evidence, file:line), the proposed guardrail (which rule file / arch test /
+   brief), and a `## Tasks` checklist. Create the label first if missing (`gh label create agent-harness`).

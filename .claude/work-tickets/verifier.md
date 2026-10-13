@@ -25,5 +25,8 @@ Your prompt gives the values for `NNN`, `<slug>`, `<repo>`, `<wt>` and `<report>
   (or `## Question` with concrete options) with the evidence (file:line, what happens vs. what should), a
   `## Tasks` checklist (open questions start with `- [ ] Decide …`), and `## Reference` →
   `Found while working #NNN` plus README sections. Keep it small.
+- **Persist the verdict** — `gh issue comment <source NNN> --body-file <repo>/.user/verdict-<source NNN>.md` (then
+  `rm` it), the body being `<!-- finding-verdict -->` on the first line, then the RESULT line below verbatim.
+  `/harness-retro` reads these for finding precision.
 - **Result** — your final reply must be only this line:
   `RESULT F-<source NNN>: confirmed|duplicate|invalid · <created issue url | duplicate of #MMM | none> · <reason, ≤ 15 words>`
