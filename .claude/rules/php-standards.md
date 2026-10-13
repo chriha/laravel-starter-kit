@@ -56,3 +56,6 @@ $result = $object instanceof Model
 ## Code Readability
 - Extract complex conditions into expressive boolean methods: `isEligibleForDiscount()`.
 - Reference: [Clean Code PHP](https://github.com/piotrplenik/clean-code-php/tree/master)
+
+## Cognitive Complexity
+!Important: always keep cognitive complexity low!

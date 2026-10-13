@@ -15,13 +15,13 @@ paths:
 ## Pattern
 
 ```php
-final readonly class ApplySomething
+final readonly class Create
 {
     public function __construct(
         private SomeDependency $dependency,
     ) {}
 
-    public function handle(Something $request): Something
+    public function handle(ChangeRequest $request): ChangeRequest
     {
         $this->assertPreconditions($request);
 
@@ -30,10 +30,32 @@ final readonly class ApplySomething
         return $request;
     }
 
-    private function assertPreconditions(Something $request): void
+    private function assertPreconditions(ChangeRequest $request): void
     {
         if ($request->isBlocked()) {
-            throw new SomethingException('Cannot do something.');
+            throw new ChangeRequestException('Cannot apply blocked request.');
+        }
+    }
+}
+```
+
+## Action Composition
+
+Inject other actions via constructor to orchestrate complex flows:
+
+```php
+final readonly class ImportOrders
+{
+    public function __construct(
+        private CreateOrder $createOrder,
+        private UpdateOrder $updateOrder,
+    ) {}
+
+    public function handle(OrderBatch $batch): void
+    {
+        // Orchestrate multiple operations
+        foreach ($batch->items as $item) {
+            $this->createOrder->handle($item);
         }
     }
 }

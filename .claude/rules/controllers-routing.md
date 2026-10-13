@@ -16,18 +16,18 @@ paths:
 ## Pattern
 
 ```php
-final readonly class TeamController
+final readonly class RecommendationController
 {
-    public function __construct(private SomeService $something) {}
+    public function __construct(private RecommendationService $recommendations) {}
 
     public function __invoke(ShowRequest $request): ResourceCollection
     {
         $validated = $request->validated();
 
         // Delegate to service/action, return response
-        $result = $this->something->get($validated);
+        $result = $this->recommendations->forUser($validated);
 
-        return UserResource::collection($result);
+        return ProductResource::collection($result);
     }
 }
 ```

@@ -9,7 +9,7 @@ for `/work-tickets`.
 Tickets are **GitHub issues** in this repo (`gh issue …`). Open-question tickets are open issues labeled
 `question`, with `**Type:** Open question` on the metadata line, a `## Question` section and a `## Tasks`
 list starting with `- [ ] Decide …`. `/work-tickets` labels them so because an agent would otherwise have to
-invent game design.
+invent product behavior.
 
 **This command writes no application code, doesn't edit `README.md`, runs no tests, and never touches
 git.** It only edits the one issue (title, body, labels).
@@ -56,15 +56,18 @@ Edit the issue into a normal ticket:
 
 - Title `Decide: …` → `<what to implement>` (`gh issue edit NNN --title …`).
 - Metadata line: `**Type:** Open question` → the real type (`Feature` / `Bug` / `Refactor`); keep `Area`.
+  Set `· **Playwright:** no — <why>` or `· **Playwright:** yes — <why>; check: <what to verify>` for the
+  decided work (criteria in `.claude/work-tickets/tickets.md`; replace the open question's default, add
+  it if missing). Ask via `AskUserQuestion` only when it's a close call.
 - Keep the `## Question` section as is, and add a `## Decision` section below it: each decision as a
   bullet, concrete (numbers, rules, edge cases), plus the human's reasoning where given.
 - `## Tasks`: tick the `Decide …` task(s) (`- [x]`), then replace vague tasks like "Implement accordingly"
   with concrete `- [ ]` tasks derived from the decision — including **"Document in README → <section>"**
-  when the decision is a game rule, and **tests** for the new rule.
+  when the decision is a product rule, and **tests** for the new rule.
 - Only tests and test coverage count as quality work: never add tasks for code style, Rector, linting or
   static analysis (Pint, Rector, PHPStan, ESLint, Prettier).
 
-Show the human the new `## Decision` + `## Tasks` and ask once via `AskUserQuestion`:
+Show the human the new `## Decision` + `## Tasks` and the Playwright decision with its reason, and ask once via `AskUserQuestion`:
 **"Move this ticket to the ready queue?"** — options: `Yes (Recommended)` / `Adjust`. On `Adjust`, take the
 feedback, update the issue, and ask again.
 

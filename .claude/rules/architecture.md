@@ -22,17 +22,18 @@ Input and delegation layers should be thin. Validate, authorize, and delegate.
 ```
 app/
 ├── Actions/          # State mutation operations (create/update/delete)
+├── Queries/          # Complex query builders
+├── Validation/       # Reusable validation rule providers
+├── Workflows/        # Multi-step flows (see workflows.md)
 ├── Console/Commands/ # Thin artisan commands
 ├── Contracts/        # Interfaces
 ├── DataObjects/      # Immutable data containers
 ├── Enums/            # Type-safe enumerations
 ├── Events/           # Domain events
 ├── Exceptions/       # Custom exceptions
-├── Features/         # Laravel Pennant feature flags
 ├── Http/Controllers/ # Thin controllers
 ├── Http/Requests/    # Form requests
 ├── Http/Resources/   # API resources (versioned V1/, V2/)
-├── Imports/          # Data import implementations
 ├── Jobs/             # Queued jobs (thin, delegate to actions)
 ├── Listeners/        # Event listeners
 ├── Models/           # Eloquent models
@@ -41,11 +42,9 @@ app/
 ├── Rules/            # Custom validation rules
 ├── Services/         # Reusable business logic (no state mutation)
 └── Support/          # Utilities and helpers
-├── Queries/          # Complex query builders
-├── Validation/       # Reusable validation rule providers
 ```
 
-Organize by domain within each directory: `Actions/Users/`, `Actions/Teams/`.
+Organize by domain within each directory: `Actions/Users/`, `Actions/Billing/`.
 
 ## Naming Conventions
 
@@ -54,17 +53,19 @@ Organize by domain within each directory: `Actions/Users/`, `Actions/Teams/`.
 | PHP Classes | PascalCase | `UserController`, `CreateUser`       |
 | PHP Methods | camelCase | `getUserName()`, `processOrder()`    |
 | PHP Variables | camelCase | `$firstName`, `$orderTotal`          |
-| Route URLs | kebab-case | `/user-profiles`, `/api/v1/teams`    |
+| Route URLs | kebab-case | `/user-profiles`, `/api/v1/users`    |
 | Route Names | snake_case with dots | `user_profiles.show`, `orders.index` |
 | Database Tables | snake_case (plural) | `users`, `order_items`               |
 | Database Columns | snake_case | `created_at`, `first_name`           |
 | Config Files | kebab-case | `pdf-generator.php`                  |
 | Config Keys | snake_case | `max_upload_size`, `api_key`         |
 | Artisan Commands | kebab-case | `delete-old-records`                 |
-| Enum Cases | screaming snake_case | `OrderStatus::PENDING`               |
+| Enum Cases | TitleCase | `OrderStatus::Pending`               |
 
 ## Required Suffixes
 
 Use suffixes to make class purpose unambiguous:
 
-`Controller`, `Command`, `Job`, `Request`, `Resource`, `Service`, `Action`, `Query`, `Policy`, `Observer`, `Listener`, `Exception`, `Rule`, `Scope`, `Factory`, `Seeder`, `Provider`, `Middleware`, `Event`, `Notification`, `Mail`, `Cast`
+`Controller`, `Command`, `Job`, `Request`, `Resource`, `Service`, `Query`, `Policy`, `Observer`, `Listener`, `Exception`, `Rule`, `Scope`, `Factory`, `Seeder`, `Provider`, `Middleware`, `Event`, `Notification`, `Mail`, `Cast`
+
+Actions take no suffix: name them verb-first (`CreateSale`, `AttemptLogin`), see `actions.md`.

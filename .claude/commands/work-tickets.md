@@ -1,5 +1,5 @@
 ---
-allowed-tools: Read, Write, Edit, Grep, Glob, Agent, SendMessage, Bash(ls:*), Bash(cat:*), Bash(grep:*), Bash(find:*), Bash(mv:*), Bash(rm:*), Bash(mkdir:*), Bash(cp:*), Bash(ln:*), Bash(cd:*), Bash(git status:*), Bash(git diff:*), Bash(git log:*), Bash(git show:*), Bash(git fetch:*), Bash(git worktree:*), Bash(git branch:*), Bash(git -C:*), Bash(gh pr:*), Bash(gh issue:*), Bash(php artisan test:*), Bash(npm run:*), Bash(composer lint:*), Bash(composer test:*), Bash(composer install:*), mcp__codegraph__codegraph_explore
+allowed-tools: Read, Write, Edit, Grep, Glob, Agent, SendMessage, Bash(ls:*), Bash(cat:*), Bash(grep:*), Bash(find:*), Bash(mv:*), Bash(rm:*), Bash(mkdir:*), Bash(cp:*), Bash(ln:*), Bash(cd:*), Bash(git status:*), Bash(git diff:*), Bash(git log:*), Bash(git show:*), Bash(git fetch:*), Bash(git worktree:*), Bash(git branch:*), Bash(git -C:*), Bash(gh pr:*), Bash(gh api:*), Bash(gh issue:*), Bash(php artisan test:*), Bash(npm run:*), Bash(composer lint:*), Bash(composer test:*), Bash(composer install:*), mcp__codegraph__codegraph_explore
 description: Pick up ready tickets (GitHub issues), have sub-agents fix each one in its own worktree and open a PR (or plan it, if big), turn verified side findings into new issues, and file tickets through review to closed
 ---
 
@@ -7,7 +7,6 @@ Work the ticket queue. **Tickets are GitHub issues in this repo** (`gh issue …
 
 | State | Holds | Who changes it |
 |-------|-------|----------------|
-| open, `triage` | planned tickets filed by `/architecture-loop` (+ `arch-loop` label), awaiting acceptance | a human → `ready` (or closes it as not planned) |
 | open, `ready` | ready tickets — **the only ones this command works** | this command → `review`, `question`, `plan` |
 | open, `question` | open questions — need a human decision first | `/answer-tickets NNN` → `ready` |
 | open, `plan` | big tickets (> 5 files) with a drafted plan + questions | `/plan-tickets [NNN]` → `ready` |
@@ -15,9 +14,10 @@ Work the ticket queue. **Tickets are GitHub issues in this repo** (`gh issue …
 | closed | PR merged, all tasks `- [x]` + a `## Summary` | — |
 
 **Quality bar: the PR must pass CI.** Every change is covered by green Pest tests, and every gate of
-`.github/workflows/tests.yml` passes locally before the PR is opened or marked ready: type coverage, lint
-(Pint, PHPCS, Rector, Prettier, ESLint), static analysis (PHPStan/Larastan), frontend types and unit tests
-with 100 % coverage. Implementers run them and fix what fails (see *CI gates* in `implementer.md`).
+`.github/workflows/tests.yml` (`composer test`) passes locally before the PR is opened or marked ready: type
+coverage of 100 % (`--min=100`), lint (Composer validate, Pint, PHPCS, Rector, Prettier) and static
+analysis (PHPStan/Larastan) — plus the full Pest suite (CI runs it via `test:unit` with exactly 100 % coverage). Implementers run them and
+fix what fails (see *CI gates* in `implementer.md`).
 Style/lint/static-analysis issues are fixed in the ticket that causes them — never reported as findings
 or tickets.
 
@@ -107,7 +107,7 @@ read issue bodies here.
   For each, `gh pr list --head <base> --state all --json state -q '.[0].state'`:
   - **MERGED** → in the ticket's worktree (`git worktree list`, by its `NNN-` prefix):
     `git -C <wt> merge origin/main --no-edit`. Clean → `git -C <wt> push`, then
-    `gh pr edit <url> --base main`. Conflict → `git -C <wt> merge --abort` and keep it as
+    `gh api -X PATCH repos/{owner}/{repo}/pulls/<PR number> -f base=main` (not `gh pr edit --base` — it fails on the Projects-classic GraphQL deprecation). Conflict → `git -C <wt> merge --abort` and keep it as
     `UNSTACK_CONFLICT: NNN <url>` for the report. No worktree → keep it as `UNSTACK_CONFLICT` too.
   - **CLOSED** (base dropped) → keep it as `UNSTACK_CONFLICT: NNN <url> (base closed)`.
   - **OPEN** → leave it.

@@ -32,8 +32,12 @@ Argument (optional): an **issue number** (`/plan-tickets 115`, `#115` also works
   new), and that the steps still match the current code — other tickets may have landed since it was
   planned (`git` is off-limits here; use codegraph/grep/read). Note any drift; it may become an extra
   question.
+- Check the metadata line's `**Playwright:**` field against the plan (criteria in
+  `.claude/work-tickets/tickets.md`). Missing → propose `yes` or `no` with a one-line reason (`yes` also
+  names what to check in the browser); present but no longer fitting the plan → propose a change.
 - Give the human a **short briefing** (≤ 10 lines): the problem in one line, the approach, the steps as a
-  numbered one-liner list, the file estimate, and how many questions are open.
+  numbered one-liner list, the file estimate, how many questions are open, and the Playwright decision
+  with its reason.
 
 ## Step 2 — Ask the questions
 
@@ -48,6 +52,8 @@ Ask **every** question whose `**Answer:**` is `_open_`, personally, via `AskUser
   `## Questions`.
 - If an answer changes the premise of later questions, re-phrase or drop those before asking.
 - If an answer is "split this ticket", note which steps move out; you'll create the new issues in Step 3.
+- Ask about **Playwright** only when it's a close call — options `No — <reason>` / `Yes — <reason>;
+  check: …`, recommended first.
 
 ## Step 3 — Update the plan
 
@@ -58,16 +64,18 @@ Edit the issue body:
   executable **without** reading the questions. Update `**Estimated files:**`.
 - Rewrite `## Tasks` to match the final `### Steps` one-to-one (`- [ ]` per step, with its **Done when:**).
   Keep the original problem text as is.
-- If the answers change a game rule, add a task to update the matching `README.md` section.
+- If the answers change a product rule, add a task to update the matching `README.md` section.
 - Only tests and test coverage count as quality work: every step's **Done when:** includes its tests, and no
   step, task or question is about code style, Rector, linting or static analysis (Pint, Rector, PHPStan,
   ESLint, Prettier) — drop any such ones from the drafted plan.
-- Metadata line: `**Plan:** pending` → `**Plan:** approved (YYYY-MM-DD)`.
+- Metadata line: `**Plan:** pending` → `**Plan:** approved (YYYY-MM-DD)`, and set
+  `· **Playwright:** no — <why>` or `· **Playwright:** yes — <why>; check: <what to verify>` (add it if
+  missing).
 - **Split** (if chosen): `gh issue create --label ready` a new issue for the carved-out steps, in the normal
-  ticket format, with its own `**Plan:** approved` line if it still exceeds 5 files, and a `## Reference`
-  back to `#NNN`.
+  ticket format, with its own `**Plan:** approved` line if it still exceeds 5 files, its own
+  `**Playwright:**` decision for the carved-out steps, and a `## Reference` back to `#NNN`.
 
-Show the human the updated `## Plan` → `### Steps` and ask once via `AskUserQuestion`:
+Show the human the updated `## Plan` → `### Steps` and the Playwright decision, and ask once via `AskUserQuestion`:
 **"Release this plan to the ready queue?"** — options: `Approve (Recommended)` / `Adjust`. On `Adjust`,
 take the feedback, update the issue, and ask again.
 

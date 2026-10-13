@@ -5,6 +5,11 @@ the branch this ticket is **stacked** on — then also `<base-wt>` and the base 
 
 - **Read the issue** (`gh issue view NNN`) and the `## Summary` of every closed issue it references. Don't
   edit the issue or its labels except in planning mode or when filing the ticket (below).
+- **Playwright decision** — read the metadata line's `**Playwright:**` field (see `tickets.md`) before any
+  browser use. **`no` or missing** → no `mcp__playwright__*` / `mcp__plugin_playwright_*` tools and no new
+  or changed Pest browser tests in `tests/Browser`; the existing browser suite still runs as part of the
+  CI gates. **`yes`** → both are allowed, but only to verify the items on its `check:` list. If a `no`
+  ticket turns out to need a browser after all, don't use one — report it as an open question.
 - **Size check first, before any setup or code change.** Explore read-only. Use CodeGraph to locate code,
   and read files in `<wt>` if it exists (continuing), otherwise in `<base-wt>` when stacked, otherwise in
   `<repo>/.user/worktrees/_main` (a detached checkout of `origin/main`). Never edit those.
@@ -39,7 +44,7 @@ the branch this ticket is **stacked** on — then also `<base-wt>` and the base 
 - If a test fails with "Unable to locate file in Vite manifest", or after a `git merge origin/<base>` or any
   change under `resources/js`, run `npm run build` inside `<wt>` before trusting a browser test.
 - Read `CLAUDE.md` and follow it: activate the relevant skills (`laravel-best-practices`, `pest-testing`,
-  `inertia-vue-development`, …), use `search-docs` before code changes, follow sibling-file conventions, use
+  `inertia-vue-mainment`, …), use `search-docs` before code changes, follow sibling-file conventions, use
   `php artisan make:` generators. The PR must pass every CI gate — see *CI gates* below.
 - **Implementing:**
   - If an unplanned ticket grows past 5 files mid-work, stop. Discard **your own** uncommitted changes
@@ -48,11 +53,6 @@ the branch this ticket is **stacked** on — then also `<base-wt>` and the base 
     Then switch to planning mode.
   - Work **every task** in `## Tasks`. Stay in scope — no opportunistic refactors, no fixing unrelated bugs;
     report them under `## Findings` instead.
-  - **`**Type:** Refactor` tickets** (e.g. from `/architecture-loop`) must preserve behaviour exactly — if a
-    change would alter behaviour, stop and report it as an open question. When the change brings code into
-    rule-compliance, tighten what now holds in the same PR: enable/extend the matching arch test in
-    `tests/Architecture`, delete the now-fixed `phpstan-baseline.neon` entry. Add a `**Rules touched**:`
-    bullet (rules, arch tests, baseline entries changed) to the report's `## Summary`.
   - Every change must be tested: write/update Pest tests, run the affected ones with
     `php artisan test --compact <file or --filter>` until green. Every new or changed behaviour needs a test
     covering it.
@@ -60,20 +60,24 @@ the branch this ticket is **stacked** on — then also `<base-wt>` and the base 
     `docs` / `chore` / `style`, lowercase imperative, no trailing period, ≤ 72 chars; match `git log --oneline -15`.
     One commit per ticket by default; split only for clearly separate concerns or independent plan steps.
     Each commit leaves tests green. Stage by path (`git add <files>`), never `-A` / `.`. Body: one or two
-    lines on what and why, then `Refs #NNN`, then `Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>`.
-  - **CI gates** — before the first push, and again before `gh pr ready`, run inside `<wt>` exactly what
-    `.github/workflows/tests.yml` runs, and fix every failure:
-    1. `composer lint` — auto-fixes (Pint, PHPCBF, Rector, Prettier). Review what it changed; commit fixes
+    lines on what and why, then `Refs #NNN`, then the `Co-Authored-By:` trailer exactly as the session's
+    attribution system reminder gives it (it names the model you run on — never copy a model name from an
+    older commit or brief).
+  - **CI gates** — before the first push, and again before `gh pr ready`, run inside `<wt>` what
+    `.github/workflows/tests.yml` runs (`composer test` = `test:type-coverage`, `test:lint`, `test:rector`,
+    `test:types`, `test:unit` = Pest with exactly 100 % coverage; plus `vendor/bin/mago lint`), plus the auto-fixer, and fix every failure:
+    1. `composer lint` — auto-fixes (PHPCBF, Rector, Pint, Prettier). Review what it changed; commit fixes
        to files your ticket touches (`style: …` or folded into your commit before pushing).
-    2. `composer test:lint` — Composer validate, Pint, PHPCS, Rector, Prettier, ESLint (check only).
+    2. `composer test:lint` — Composer validate, Pint, PHPCS, Rector, Prettier (check only).
     3. `composer test:types` — PHPStan/Larastan. Fix the code; never add baseline entries or
        `@phpstan-ignore` to silence your own changes. Only exception: Larastan can't type `$model->pivot`,
        so `Access to an undefined property <Model>::$pivot` goes into `phpstan-baseline.neon` like the
        existing entries.
-    4. `npm run types` — regenerates Wayfinder files and runs `vue-tsc`.
-    5. `composer test:type-coverage` — 100 % type coverage.
-    6. `composer test:unit` — full parallel suite with `--coverage --min=100` (needs pcov/xdebug). Cover
-       every new line with a test; don't add `@codeCoverageIgnore` to dodge it.
+    4. `composer test:type-coverage` — type coverage of 100 % (`--min=100`).
+    5. `php artisan test --compact --parallel` — the full Pest suite (Unit, Feature, Architecture and
+       Browser). CI runs the same suite unfiltered (`php artisan test --parallel`); run it locally first so
+       failures surface before the push.
+    6. `vendor/bin/mago lint` — Mago lint (CI runs it as its own step).
 
     Re-run a gate after fixing it until all six pass. A gate that also fails on
     `<repo>/.user/worktrees/_main` (check with the same command there, read-only) is **pre-existing**:
@@ -88,10 +92,11 @@ the branch this ticket is **stacked** on — then also `<base-wt>` and the base 
     (partial/blocked), ending with `🤖 Generated with [Claude Code](https://claude.com/claude-code)`.
     PR exists → just push (and swap `Refs` → `Closes` in its body once the ticket is done).
     Status **done** → `gh pr ready <PR>`. Partial/blocked PRs stay draft.
-  - A task that needs a product/game-design decision the issue and `README.md` don't answer: **don't
+  - A task that needs a product/product decision the issue and `README.md` don't answer: **don't
     guess** — skip it and report it as an open question.
 - **Planning mode** (the only case where you edit the issue): leave the problem/tasks text as is, add
-  `· **Plan:** pending` to the metadata line, append the sections below to the body, then relabel it
+  `· **Plan:** pending` to the metadata line (plus `· **Playwright:** yes|no — <why>[; check: …]` if it's
+  missing, decided by the criteria in `tickets.md`), append the sections below to the body, then relabel it
   `ready` → `plan`. No code changes, commits, push or PR.
   ```
   ## Plan
@@ -116,7 +121,7 @@ the branch this ticket is **stacked** on — then also `<base-wt>` and the base 
      - Blocks: step N
      - **Answer:** _open_
   ```
-  Ask **everything** you'd otherwise guess (game-design rules, numbers, UX, naming, scope cuts, splitting).
+  Ask **everything** you'd otherwise guess (product rules, numbers, UX, naming, scope cuts, splitting).
   Each question must be answerable on its own. No questions is fine if the plan is unambiguous.
 - **Write `<report>`** (overwrite) with these sections:
   ```
@@ -152,7 +157,7 @@ the branch this ticket is **stacked** on — then also `<base-wt>` and the base 
     `<report>` for follow-up fixes). Otherwise it stays `ready`.
   - **Open questions from the report** → create one issue each:
     `gh issue create --label question --title "Decide: …" --body …` with `**Type:** Open question ·
-    **Area:** …`, `## Question` (with options), `## Tasks` starting with `- [ ] Decide …`, `## Reference` →
+    **Area:** … · **Playwright:** no — <why>`, `## Question` (with options), `## Tasks` starting with `- [ ] Decide …`, `## Reference` →
     `Raised while working #NNN`. Mention each new issue number in the ticket's `### Open` list.
 - **Result** — your final reply must be only this line:
   `RESULT NNN: <done|partial|blocked|planned> · <review|ready|plan> · PR <url|none> <ready|draft> · commits <n> · open-questions filed: <#numbers|none> · findings: <short title>; <short title>; … (or "none")`

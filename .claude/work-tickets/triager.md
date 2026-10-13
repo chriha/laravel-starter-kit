@@ -14,7 +14,7 @@ not worked, only the base for the next one. Any other chain ticket must be `read
 **Classify** each ready issue (only the argument's issues, if given):
 
 - **Open question** — `**Type:** Open question`, or a first task starting with `Decide`. An agent would
-  have to invent game design. **Relabel** it `ready` → `question`.
+  have to invent product behavior. **Relabel** it `ready` → `question`.
 - **Blocked** — depends on another ticket (`#NNN`, "after #NNN") whose issue is **not closed**. A dependency
   labeled `review` (PR not merged yet), `question`, `plan`, `ready`, or scheduled in this run blocks too —
   ticket branches are cut from `origin/main`, so a dependency only counts once it's merged. Leave it.

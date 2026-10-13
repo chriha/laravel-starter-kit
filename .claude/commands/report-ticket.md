@@ -7,7 +7,7 @@ Turn something the human reports — a **bug**, a **change request** or a **new 
 actionable ticket and put it in the ready queue for `/work-tickets`.
 
 Tickets are **GitHub issues** in this repo (`gh issue …`). Ticket shape: `.claude/work-tickets/tickets.md`;
-closed issue **#81** is the reference shape. The plan format is the one in
+the shape in `.claude/work-tickets/tickets.md` is the reference. The plan format is the one in
 `.claude/work-tickets/implementer.md` ("Planning mode").
 
 **This command writes no application code, runs no tests, and never touches git.** It only creates issues.
@@ -28,15 +28,22 @@ types the details via "Other" or a follow-up).
   For a bug, find the cause (file:line, what happens vs. what should). Don't run tests or the app.
 - List every file the change would create or modify, **including** tests, migrations, factories, seeders,
   Vue pages/components, TS types and `README.md`.
+- Decide **Playwright** (criteria in `.claude/work-tickets/tickets.md`): `yes` only if the behaviour can
+  only be seen or reproduced in a real browser and Feature/Unit tests can't cover it — then also name what
+  to check in the browser; otherwise `no`. Always with a one-line reason.
 - Brief the human (≤ 10 lines): what you understood, what the code does today (with file:line), the likely
-  fix/approach, the file estimate.
+  fix/approach, the file estimate, and the proposed Playwright decision with its reason.
 
 ## Step 2 — Ask
 
-Ask everything an implementer would otherwise guess — game-design rules, numbers, UX, naming, edge cases,
+Ask everything an implementer would otherwise guess — product rules, numbers, UX, naming, edge cases,
 scope, splitting — via `AskUserQuestion`, the same way `/plan-tickets` Step 2 does: standalone question
 text, 2–4 options, recommended first with `(Recommended)`, `preview` for code/layout/formula shapes,
 follow-ups until the decision is concrete. No questions is fine if the report is unambiguous.
+
+Ask about **Playwright** only when it's a close call (e.g. UI behaviour that a Feature test may or may not
+cover) — options `No — <reason>` / `Yes — <reason>; check: …`, recommended first. Otherwise keep the
+proposal from Step 1.
 
 If the human wants to postpone a decision, the ticket becomes an **open question** (see Step 3).
 
@@ -45,7 +52,7 @@ If the human wants to postpone a decision, the ticket becomes an **open question
 Write the body to `.user/new-ticket.md` (`mkdir -p .user`):
 
 ```
-**Type:** <type> · **Area:** `<paths>`[ · **Plan:** approved (YYYY-MM-DD)]
+**Type:** <type> · **Area:** `<paths>`[ · **Plan:** approved (YYYY-MM-DD)] · **Playwright:** <no — <why> | yes — <why>; check: <what to verify in the browser>>
 
 ## Problem
 <1–5 sentences: what happens vs. what should, with file:line evidence; for features: what's missing and why>
@@ -54,7 +61,7 @@ Write the body to `.user/new-ticket.md` (`mkdir -p .user`):
 <one bullet per answer from Step 2, concrete (numbers, rules, edge cases); omit if nothing was asked>
 
 ## Tasks
-- [ ] <concrete task> — including tests, and "Document in README → <section>" for a game rule
+- [ ] <concrete task> — including tests, and "Document in README → <section>" for a product rule
 
 ## Reference
 Reported by the human (YYYY-MM-DD). README → <section>. Related: #NNN
@@ -69,7 +76,7 @@ Reported by the human (YYYY-MM-DD). README → <section>. Related: #NNN
   concrete options instead of `## Decision`, tasks starting with `- [ ] Decide …`.
 - Title: short, imperative, what to implement (`Clamp barracks queue timer at zero`).
 
-Show the human the title and body and ask once via `AskUserQuestion`: **"File this ticket?"** — options:
+Show the human the title and body (the Playwright decision is on the metadata line) and ask once via `AskUserQuestion`: **"File this ticket?"** — options:
 `File as ready (Recommended)` / `Adjust`. On `Adjust`, update the draft and ask again.
 
 ## Step 4 — File & report

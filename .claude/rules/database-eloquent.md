@@ -12,12 +12,12 @@ paths:
 - Use custom EloquentBuilder classes for models with 5+ query scopes:
 
 ```php
-final class User extends Model
+class Transfer extends Model
 {
     #[\Override]
-    public function newEloquentBuilder($query): UserEloquentBuilder
+    public function newEloquentBuilder($query): TransferEloquentBuilder
     {
-        return new UserEloquentBuilder($query);
+        return new TransferEloquentBuilder($query);
     }
 }
 ```
@@ -31,39 +31,26 @@ final readonly class AgeBetween
 
     public function __invoke(Builder $query): Builder
     {
-        return $query->whereBetween('date_of_birth', [...]);
+        return $query->whereBetween('year_of_birth', [...]);
     }
 }
 
-// Usage: User::query()->tap(new AgeBetween(7, 10))->get()
+// Usage: Transfer::query()->tap(new AgeBetween(7, 10))->get()
 ```
 
 - Set casts via `casts()` method, not `$casts` property. Follow existing model conventions.
 
 ## Factories
 - Use factories only for tests.
-- Do NOT use the `HasFactory` trait on Models.
-- Call factories directly: `TeamFactory::new()->create([...])`.
+- Models that have a factory use the `HasFactory` trait.
+- Call factories via the model: `Transfer::factory()->create([...])`.
 - `definition()` should set a valid default state.
 - Use separate state methods for different states:
 
-```php
-final class TeamFactory extends Factory
-{
-    public function definition(): array
-    {
-        return ['order' => 0, 'phase' => 1];
-    }
-
-    public function withUser(): self
-    {
-        return $this->state(fn (): array => ['users' => [...]]);
-    }
-}
-```
-
 ## Migrations
-- Never write `down()` methods. Write a new `up()` migration instead.
+- Don't write `down()` methods by default. Fix forward with a new `up()` migration instead.
+- Exception: when `up()` moves or destroys existing data (e.g. copies a column into a new table, then drops it), write a `down()` that restores that data. Cover the rollback with a test.
+- This applies to new migrations only. Leave the `down()` methods of existing migrations as they are.
 - Use `shouldRun()` to conditionally control migration execution.
 - When modifying a column, include ALL previously defined attributes — otherwise they are dropped.
 

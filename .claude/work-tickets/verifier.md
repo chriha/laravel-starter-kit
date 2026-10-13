@@ -16,10 +16,12 @@ Your prompt gives the values for `NNN`, `<slug>`, `<repo>`, `<wt>` and `<report>
     fails on `main` is real — ticket it as `Type: Refactor` (or `Bug`) naming the command and its output.
   - **duplicate** — already covered by issue `#MMM`. Create nothing.
   - **confirmed, actionable** — fix is clear from code/README → `gh issue create --label ready`.
-  - **confirmed, needs a decision** — needs a game-design/product call → `gh issue create --label question`
+  - **confirmed, needs a decision** — needs a product/product call → `gh issue create --label question`
     with a `Decide: …` title.
 - Ticket shape — match issue #81: a short title, body with
-  `**Type:** Bug | Content | Refactor | Test | Docs | Open question · **Area:** \`paths\``, a `## Problem`
+  `**Type:** Bug | Content | Refactor | Test | Docs | Open question · **Area:** \`paths\` ·
+  **Playwright:** no — <why>` (or `yes — <why>; check: <what to verify in the browser>` only when the
+  finding can only be seen in a real browser — criteria in `tickets.md`), a `## Problem`
   (or `## Question` with concrete options) with the evidence (file:line, what happens vs. what should), a
   `## Tasks` checklist (open questions start with `- [ ] Decide …`), and `## Reference` →
   `Found while working #NNN` plus README sections. Keep it small.
