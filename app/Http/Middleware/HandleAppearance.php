@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\View;
 use Symfony\Component\HttpFoundation\Response;
 
-final class HandleAppearance
+final readonly class HandleAppearance
 {
+    public function __construct(private Factory $view) {}
+
     /**
      * Handle an incoming request.
      *
@@ -18,7 +20,7 @@ final class HandleAppearance
      */
     public function handle(Request $request, Closure $next): Response
     {
-        View::share('appearance', $request->cookie('appearance') ?? 'system');
+        $this->view->share('appearance', $request->cookie('appearance') ?? 'system');
 
         return $next($request);
     }
