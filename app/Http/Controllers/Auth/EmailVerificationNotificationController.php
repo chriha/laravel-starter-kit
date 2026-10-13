@@ -9,7 +9,7 @@ use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
-final class EmailVerificationNotificationController
+final readonly class EmailVerificationNotificationController
 {
     /**
      * Send a new email verification notification.

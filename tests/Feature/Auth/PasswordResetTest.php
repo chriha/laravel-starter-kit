@@ -73,3 +73,21 @@ test('password cannot be reset with invalid token', function (): void {
 
     $response->assertSessionHasErrors('email');
 });
+
+test('reset link request requires a valid email', function (): void {
+    $this->post(route('password.email'), ['email' => 'not-an-email'])->assertSessionHasErrors('email');
+});
+
+test('new password requires token, and a confirmed password', function (array $overrides, string $field): void {
+    $this->post(route('password.store'), [
+        'token' => 'token',
+        'email' => 'test@example.com',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+        ...$overrides,
+    ])->assertSessionHasErrors($field);
+})->with([
+    'missing token' => [['token' => ''], 'token'],
+    'unconfirmed password' => [['password_confirmation' => 'different'], 'password'],
+    'missing password' => [['password' => '', 'password_confirmation' => ''], 'password'],
+]);

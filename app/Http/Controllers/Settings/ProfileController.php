@@ -4,26 +4,26 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Settings;
 
+use App\Http\Requests\Settings\ProfileDeleteRequest;
 use App\Http\Requests\Settings\ProfileUpdateRequest;
 use App\Models\User;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Container\Attributes\CurrentUser;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
-final class ProfileController
+final readonly class ProfileController
 {
     /**
      * Show the user's profile settings page.
      */
-    public function edit(Request $request, #[CurrentUser] User $user): Response
+    public function edit(Request $request): Response
     {
         return Inertia::render('settings/Profile', [
-            'mustVerifyEmail' => $user instanceof MustVerifyEmail,
+            'mustVerifyEmail' => true,
             'status' => $request->session()->get('status'),
         ]);
     }
@@ -47,12 +47,8 @@ final class ProfileController
     /**
      * Delete the user's profile.
      */
-    public function destroy(Request $request, #[CurrentUser] User $user, #[Auth('web')] StatefulGuard $guard): RedirectResponse
+    public function destroy(ProfileDeleteRequest $request, #[CurrentUser] User $user, #[Auth('web')] StatefulGuard $guard): RedirectResponse
     {
-        $request->validate([
-            'password' => ['required', 'current_password'],
-        ]);
-
         $guard->logout();
 
         $user->delete();
