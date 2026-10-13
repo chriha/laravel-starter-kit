@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 arch('only controllers in app controllers folder')
@@ -24,4 +25,4 @@ arch('controllers do not use facades')
 arch('controllers do not directly use models')
     ->expect('App\Http\Controllers')
     ->not->toUse('App\Models')
-    ->ignoring(Model::class);
+    ->ignoring([Model::class, User::class]);

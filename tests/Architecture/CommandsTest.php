@@ -8,4 +8,4 @@ arch('commands have Command suffix')
 
 arch('commands do not use facades')
     ->expect('Illuminate\Support\Facades')
-    ->not->toBeUsedIn('App\Http\Controllers');
+    ->not->toBeUsedIn('App\Console\Commands');
